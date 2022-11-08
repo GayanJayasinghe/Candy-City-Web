@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'login_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:my_app/main_page.dart';
+// ignore: depend_on_referenced_packages
 import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    // ignore: prefer_const_constructors
+    //ignore: prefer_const_constructors
     options: FirebaseOptions(
       apiKey: "AIzaSyBREIJ7g9q6DTkNRateQwmmrqR26-7mPMA",
       appId: "1:380638360301:web:9006cd67f761cf804412e4",
@@ -15,10 +15,7 @@ Future<void> main() async {
     ),
   );
 
-// Ideal time to initialize
-  FirebaseAuth.instance.useEmulator('http://localhost:55978');
-  //await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-
+  runApp(const MyApp());
 //...
 }
 
@@ -32,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // ignore: prefer_const_constructors
-      home: LoginPage(),
+      home: MainPage(),
     );
   }
 }
