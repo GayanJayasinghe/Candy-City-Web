@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:html';
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 // Needed because we can't import `dart:html` into a mobile app,
 // while on the flip-side access to `dart:io` throws at runtime (hence the `kIsWeb` check below)
 
@@ -41,6 +42,32 @@ class _LoginPageState extends State<LoginPage> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<UserCredential> signInWithApple() async {
+    // Create and configure an OAuthProvider for Sign In with Apple.
+    final provider = OAuthProvider('apple.com')
+      ..addScope('email')
+      ..addScope('name');
+
+    // Sign in the user with Firebase.
+    return await FirebaseAuth.instance.signInWithPopup(provider);
+  }
+
+  Future<UserCredential> signInWithFacebook() async {
+    // Create a new provider
+    FacebookAuthProvider facebookProvider = FacebookAuthProvider();
+
+    facebookProvider.addScope('email');
+    facebookProvider.setCustomParameters({
+      'display': 'popup',
+    });
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithPopup(facebookProvider);
+
+    // Or use signInWithRedirect
+    // return await FirebaseAuth.instance.signInWithRedirect(facebookProvider);
   }
 
   Future<void> logIn() async {
@@ -187,7 +214,7 @@ class _LoginPageState extends State<LoginPage> {
                           SignInButton(
                             Buttons.Facebook,
                             mini: true,
-                            onPressed: logIn,
+                            onPressed: signInWithFacebook,
                             shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(30.0),
                             ),
@@ -198,65 +225,7 @@ class _LoginPageState extends State<LoginPage> {
                           SignInButton(
                             Buttons.Apple,
                             mini: true,
-                            onPressed: () async {
-                              final credential =
-                                  await SignInWithApple.getAppleIDCredential(
-                                scopes: [
-                                  AppleIDAuthorizationScopes.email,
-                                  AppleIDAuthorizationScopes.fullName,
-                                ],
-                                webAuthenticationOptions:
-                                    WebAuthenticationOptions(
-                                  // ignore: todo
-                                  // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
-                                  clientId: 'com.candycity.myapp2',
-
-                                  redirectUri:
-                                      // For web your redirect URI needs to be the host of the "current page",
-                                      // while for Android you will be using the API server that redirects back into your app via a deep link
-                                      kIsWeb
-                                          ? Uri.parse(
-                                              'https://gayanjayasinghe.github.io')
-                                          : Uri.parse(
-                                              'https://gayanjayasinghe.github.io',
-                                            ),
-                                ),
-                                // ignore: todo
-                                // TODO: Remove these if you have no need for them
-                                nonce: 'example-nonce',
-                                state: 'example-state',
-                              );
-
-                              print(credential);
-
-                              // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
-                              // after they have been validated with Apple (see `Integration` section for more information on how to do this)
-
-                              final signInWithAppleEndpoint = Uri(
-                                scheme: 'https',
-                                host: 'https://gayanjayasinghe.github.io',
-                                path: '/sign_in_with_apple',
-                                queryParameters: <String, String>{
-                                  'code': credential.authorizationCode,
-                                  if (credential.givenName != null)
-                                    'firstName': credential.givenName!,
-                                  if (credential.familyName != null)
-                                    'lastName': credential.familyName!,
-                                  'useBundleId': !kIsWeb ? 'true' : 'false',
-                                  if (credential.state != null)
-                                    'state': credential.state!,
-                                },
-                              );
-
-                              final session = await http.Client().post(
-                                signInWithAppleEndpoint,
-                              );
-
-                              // If we got this far, a session based on the Apple ID credential has been created in your system,
-                              // and you can now set this as the app's session
-                              // ignore: avoid_print
-                              print(session);
-                            },
+                            onPressed: signInWithApple,
                             shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(30.0),
                             ),

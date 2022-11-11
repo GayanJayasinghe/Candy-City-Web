@@ -6,20 +6,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
+import 'firebase_options.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    //ignore: prefer_const_constructors
-    options: FirebaseOptions(
-      apiKey: "AIzaSyBREIJ7g9q6DTkNRateQwmmrqR26-7mPMA",
-      appId: "1:380638360301:web:9006cd67f761cf804412e4",
-      messagingSenderId: "380638360301",
-      projectId: "candy-city-4b1b6",
-    ),
+    options: DefaultFirebaseOptions.currentPlatform,
   );
 
 // check if is running on Web
-  if (kIsWeb) {
+/*  if (kIsWeb) {
     // initialiaze the facebook javascript SDK
     await FacebookAuth.i.webInitialize(
       appId: "2927154857592093",
@@ -27,7 +23,7 @@ Future<void> main() async {
       xfbml: true,
       version: "v14.0",
     );
-  }
+  }*/
   runApp(const MyApp());
 //...
 }
