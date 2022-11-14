@@ -1,19 +1,7 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_new
-import 'dart:convert';
-import 'dart:html';
-import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
-// Needed because we can't import `dart:html` into a mobile app,
-// while on the flip-side access to `dart:io` throws at runtime (hence the `kIsWeb` check below)
-
-import 'package:http/http.dart' as http;
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -27,8 +15,6 @@ class _LoginPageState extends State<LoginPage> {
   // text controllers
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _errorMessage = '';
-  final _processRunning = false;
 
   Future signIn() async {
     await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -70,172 +56,183 @@ class _LoginPageState extends State<LoginPage> {
     // return await FirebaseAuth.instance.signInWithRedirect(facebookProvider);
   }
 
-  Future<void> logIn() async {
-    final LoginResult result = await FacebookAuth.instance
-        .login(); // by default we request the email and the public profile
-
-    // loginBehavior is only supported for Android devices, for ios it will be ignored
-    // final result = await FacebookAuth.instance.login(
-    //   permissions: ['email', 'public_profile', 'user_birthday', 'user_friends', 'user_gender', 'user_link'],
-    //   loginBehavior: LoginBehavior
-    //       .DIALOG_ONLY, // (only android) show an authentication dialog instead of redirecting to facebook app
-    // );
-
-    if (result.status == LoginStatus.success) {
-      var _accessToken = result.accessToken;
-      //_printCredentials();
-      // get the user data
-      // by default we get the userId, email,name and picture
-      final userData = await FacebookAuth.instance.getUserData();
-      // final userData = await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
-      var _userData = userData;
-      print('User data : ' + jsonEncode(_userData));
-    } else {
-      print(result.status);
-      print(result.message);
-    }
-
-    setState(() {
-      var _checking = false;
-    });
-  }
-
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: SafeArea(
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Container(),
-            ),
-            const VerticalDivider(
-              width: 20,
-              thickness: 1,
-              indent: 20,
-              endIndent: 0,
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: Center(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.android,
-                        size: 100,
-                      ),
-                      SizedBox(
-                        height: 75,
-                      ),
-                      //Hello again!
-                      Text('Hello Again!',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 36,
-                          )),
-                      SizedBox(height: 10),
-                      Text('Welcome back, you\'ve been missed!',
-                          style: TextStyle(
-                            fontSize: 20,
-                          )),
-                      SizedBox(height: 50),
-
-                      //email textfield
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                        child: TextField(
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                            hintText: 'Email',
-                            fillColor: Colors.grey[200],
-                            filled: true,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-
-                      //password textfield
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                        child: TextField(
-                          controller: _passwordController,
-                          decoration: InputDecoration(
-                            hintText: 'Password',
-                            fillColor: Colors.grey[200],
-                            filled: true,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-
-                      //sign in button
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                        child: GestureDetector(
-                          onTap: signIn,
-                          child: Container(
-                            width: 400.0,
-                            padding: EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                                color: Colors.deepPurple,
-                                borderRadius: BorderRadius.circular(12)),
-                            child: Center(
-                              child: Text(
-                                'Sign In',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 25),
-
-                      //not a member? register now
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Or sign in with',
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(
-                        height: 25,
-                      ),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          SignInButton(
-                            Buttons.Facebook,
-                            mini: true,
-                            onPressed: signInWithFacebook,
-                            shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(30.0),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10.0,
-                          ),
-                          SignInButton(
-                            Buttons.Apple,
-                            mini: true,
-                            onPressed: signInWithApple,
-                            shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(30.0),
-                            ),
-                          )
-                        ],
-                      )
-                    ]),
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints.expand(),
+          child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.lightBlue,
+                  Colors.purple,
+                ],
+                stops: [0.0, 0.5],
+              ),
+              image: DecorationImage(
+                image: AssetImage('images/Background.png'),
+                fit: BoxFit.cover,
               ),
             ),
-          ],
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              const SizedBox(
+                height: 75,
+              ),
+              //Hello again!
+              const Text('Hello Again!',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 36,
+                    fontFamily: 'LilyScriptOne',
+                  )),
+              const SizedBox(height: 10),
+              const Text('Welcome back, you\'ve been missed!',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'LilyScriptOne',
+                  )),
+              const SizedBox(height: 50),
+
+              //email textfield
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: SizedBox(
+                  width: 450,
+                  child: TextField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.email),
+                      hintText: 'Email',
+                      fillColor: Colors.blue[200],
+                      filled: true,
+                      border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.black,
+                            width: 3,
+                          ),
+                          borderRadius: BorderRadius.circular(50)),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              //password textfield
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: SizedBox(
+                  width: 450,
+                  child: TextField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.lock),
+                      hintText: 'Password',
+                      fillColor: Colors.blue[200],
+                      filled: true,
+                      border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.black,
+                            width: 3,
+                          ),
+                          borderRadius: BorderRadius.circular(50)),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              //sign in button
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              //   child: GestureDetector(
+              //     onTap: signIn,
+              //     child: Container(
+              //       width: 400.0,
+              //       padding: const EdgeInsets.all(20),
+              //       decoration: BoxDecoration(
+              //           color: Colors.deepPurple,
+              //           borderRadius: BorderRadius.circular(12)),
+              //       child: const Center(
+              //         child: Text(
+              //           'Sign In',
+              //           style: TextStyle(color: Colors.white),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: GestureDetector(
+                      onTap: signIn,
+                      child:
+                          Stack(alignment: Alignment.center, children: <Widget>[
+                        Image.asset(
+                          'images/Button.png',
+                          height: 240,
+                          width: 300,
+                        ),
+                        const Text(
+                          'Sign In',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontFamily: 'LilyScriptOne',
+                          ),
+                        ),
+                      ]))),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
+                    'Or sign in with',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.lightBlue,
+                      fontFamily: 'LilyScriptOne',
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(
+                height: 25,
+              ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SignInButton(
+                    Buttons.Facebook,
+                    mini: true,
+                    onPressed: signInWithFacebook,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10.0,
+                  ),
+                  SignInButton(
+                    Buttons.Apple,
+                    mini: true,
+                    onPressed: signInWithApple,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                  )
+                ],
+              )
+            ]),
+          ),
         ),
       ),
     );
