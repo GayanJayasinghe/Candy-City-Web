@@ -5,6 +5,7 @@ import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/login_page.dart';
+import 'package:my_app/wallet_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,34 +14,9 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-Future<void> _dialogBuilder(BuildContext context) {
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        actions: <Widget>[
-          TextButton(
-            style: TextButton.styleFrom(
-              textStyle: Theme.of(context).textTheme.labelLarge,
-            ),
-            child: const Text('Disable'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          TextButton(
-            style: TextButton.styleFrom(
-              textStyle: Theme.of(context).textTheme.labelLarge,
-            ),
-            child: const Text('Enable'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
+Future<void> _dialogBuilder(BuildContext context) async {
+  Navigator.of(context)
+      .push(MaterialPageRoute(builder: (context) => MyWallet()));
 }
 
 class _HomePageState extends State<HomePage> {
@@ -69,32 +45,33 @@ class _HomePageState extends State<HomePage> {
           ),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                  child: Center(
-                    child: Card(
-                      elevation: 10,
-                      color: Colors.white.withOpacity(0.5),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              //child: BackdropFilter(
+              //filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+              child: Center(
+                child: Card(
+                  elevation: 10,
+                  color: Colors.white.withOpacity(0.5),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  child: SizedBox(
+                    width: 460,
+                    height: 320,
+                    child: Center(
                       child: SizedBox(
-                        width: 520,
-                        height: 420,
-                        child: Center(
-                          child: SizedBox(
-                            width: 60,
-                            height: 60,
-                            child: FloatingActionButton.small(
-                                backgroundColor: Colors.white12,
-                                onPressed: () => _dialogBuilder(context),
-                                child: Icon(Icons.add)),
-                          ),
-                        ),
+                        width: 60,
+                        height: 60,
+                        child: FloatingActionButton.small(
+                            backgroundColor: Colors.white12,
+                            onPressed: () => _dialogBuilder(context),
+                            child: Icon(Icons.add)),
                       ),
                     ),
                   ),
-                )),
+                ),
+              ),
+              //)
+            ),
           ]),
         ),
       ),
