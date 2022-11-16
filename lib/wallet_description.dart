@@ -4,14 +4,35 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_app/RealtimeDatabase.dart';
+import 'package:my_app/Web3Connection.dart';
 import 'package:my_app/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class MyWalletDes extends StatelessWidget {
-  const MyWalletDes({super.key, required this.tokens, required this.userID});
+  MyWalletDes({super.key, required this.tokens, required this.userID});
 
   final tokens;
   final String userID;
+  final amountController = TextEditingController();
+
+  deposit(BuildContext context) {
+    if(amountController.text.isNotEmpty)
+    {
+      var amount = BigInt.parse(amountController.text);
+      print(amount);
+      Web3Connection.depositFund(amount);
+    }
+  }
+
+  withdraw(BuildContext context) {
+    if(amountController.text.isNotEmpty)
+    {
+      var amount = int.parse(amountController.text);
+      print(amount);
+      Web3Connection.withdrawFund(amountController.text);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +101,7 @@ class MyWalletDes extends StatelessWidget {
                                   child: SizedBox(
                                       width: 450,
                                       child: TextFormField(
-                                          controller: null,
+                                          controller: amountController,
                                           keyboardType: TextInputType.number,
                                           inputFormatters: <TextInputFormatter>[
                                             // for below version 2 use this
@@ -91,7 +112,7 @@ class MyWalletDes extends StatelessWidget {
                                           ],
                                           decoration: const InputDecoration(
                                             labelText:
-                                                "  Enter amount to deposit or withdraw",
+                                                "Enter amount to deposit or withdraw",
                                           ))),
                                 ),
                                 const SizedBox(height: 30),
@@ -101,7 +122,7 @@ class MyWalletDes extends StatelessWidget {
                                   child: Text(
                                       'In Candy City you have : $tokens CANDY'),
                                 ),
-                                const SizedBox(height: 45),
+                                const SizedBox(height: 15),
                                 Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -115,8 +136,8 @@ class MyWalletDes extends StatelessWidget {
                                                   children: <Widget>[
                                                     Image.asset(
                                                       'images/Button1.png',
-                                                      height: 60,
-                                                      width: 100,
+                                                      height: 80,
+                                                      width: 150,
                                                     ),
                                                     const Text(
                                                       'Deposit',
@@ -157,8 +178,8 @@ class MyWalletDes extends StatelessWidget {
                                                   children: <Widget>[
                                                     Image.asset(
                                                       'images/Button.png',
-                                                      height: 60,
-                                                      width: 100,
+                                                      height: 80,
+                                                      width: 150,
                                                     ),
                                                     const Text(
                                                       'Withdraw',
@@ -207,12 +228,3 @@ class MyWalletDes extends StatelessWidget {
   }
 }
 
-deposit(BuildContext context) {
-  Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => const HomePage()));
-}
-
-withdraw(BuildContext context) {
-  Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => const HomePage()));
-}

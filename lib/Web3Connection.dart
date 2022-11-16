@@ -164,19 +164,19 @@ class Web3Connection {
     return _tokenContract;
   }
 
-  static Future<dynamic> _approveFundDeposit(int value) async {
+  static Future<dynamic> _approveFundDeposit(BigInt value) async {
 
-    var val = BigInt.from(1000000000000000);
+    //var val = BigInt.from(1000000000000000);
 
    final gas = await _web3provider!.getSigner().estimateGas(TransactionRequest(
-      to:_gameContractAddress, from: _accounts![0],value : val
+      to:_gameContractAddress, from: _accounts![0],value : value
     ));
 
    print('Gas price ' + gas.toString());
 
    var gasPrice = gas * BigInt.from(13) / BigInt.from(10);
     final results =
-        await _getTokenContract().send('approve', [_gameContractAddress, val, {
+        await _getTokenContract().send('approve', [_gameContractAddress, value, {
         'gasLimit': gasPrice}]);
 
     final receipt = await results.wait();
@@ -184,10 +184,10 @@ class Web3Connection {
     return receipt;
   }
 
-  static Future<dynamic> depositFund(int amount) async {
+  static Future<dynamic> depositFund(BigInt amount) async {
     await _approveFundDeposit(amount);
     final gas = await _web3provider!.getSigner().estimateGas(TransactionRequest(
-        to:_gameContractAddress, from: _accounts![0],value : BigInt.from(amount)
+        to:_gameContractAddress, from: _accounts![0],value : amount
     ));
 
     var gasPrice = gas * BigInt.from(13) / BigInt.from(10);
@@ -199,18 +199,18 @@ class Web3Connection {
     print(receipt);
   }
 
-  static Future<dynamic> withdrawFund(int amount) async {
+  static Future<dynamic> withdrawFund(String amount) async {
     var time = DateTime.now().millisecondsSinceEpoch;
 
     final anotherWallet = Wallet(_privateKey);
 
     print(anotherWallet.address);
-    var dig = EthUtils.solidityKeccak256(['address', 'uint256', 'uint256'], [_accounts![0], time, amount]);
+    var dig = EthUtils.solidityKeccak256(['address', 'uint256', 'uint256'], [_accounts![0], time, BigNumber.from(amount)]);
     //var signature = await getSigner().signMessage(msg);
     var signature2 = await anotherWallet.signMessage(EthUtils.arrayify(dig));
 
     final gas = await _web3provider!.getSigner().estimateGas(TransactionRequest(
-        to:_gameContractAddress, from: _accounts![0],value : BigInt.from(amount)
+        to:_gameContractAddress, from: _accounts![0],value : BigInt.parse(amount)
     ));
 
     var gasPrice = gas * BigInt.from(13) / BigInt.from(10);
