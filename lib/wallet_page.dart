@@ -13,28 +13,34 @@ class MyWallet extends StatefulWidget {
   State<MyWallet> createState() => _MyWalletState();
 }
 
-connectToMeta(BuildContext context) async{
+connectToMeta(BuildContext context) async {
   var tokensAmount = await RealtimeDatabase.read('items/token');
   Web3Connection.connectToMetaMaskWallet((p0, p1) => {
-    if(p1){
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => MyWalletDes(tokens: tokensAmount, userID: FirebaseAuth.instance.currentUser!.uid)))
-    } else{
-      print(p0)
-    }
-  });
+        if (true)
+          {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => MyWalletDes(
+                    tokens: tokensAmount,
+                    userID: FirebaseAuth.instance.currentUser!.uid)))
+          }
+        else
+          {print(p0)}
+      });
 }
 
-connectToWallet(BuildContext context) async{
+connectToWallet(BuildContext context) async {
   var tokensAmount = await RealtimeDatabase.read('items/token');
   Web3Connection.connectToWalletConnect((p0, p1) => {
-    if(p1){
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => MyWalletDes(tokens: tokensAmount, userID: FirebaseAuth.instance.currentUser!.uid)))
-    } else{
-      print(p0)
-    }
-  });
+        if (p1)
+          {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => MyWalletDes(
+                    tokens: tokensAmount,
+                    userID: FirebaseAuth.instance.currentUser!.uid)))
+          }
+        else
+          {print(p0)}
+      });
 }
 
 class _MyWalletState extends State<MyWallet> {
@@ -88,42 +94,51 @@ class _MyWalletState extends State<MyWallet> {
                                       fontSize: 36,
                                       fontFamily: 'LilyScriptOne',
                                       color: Colors.white,
+                                      decoration: TextDecoration.underline,
                                     )),
                                 const SizedBox(height: 40),
-                                OutlinedButton.icon(
-                                  style: OutlinedButton.styleFrom(
-                                    backgroundColor: Colors.white,
-                                    elevation: 20,
-                                    shadowColor: Colors.black,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 20, horizontal: 20),
+                                SizedBox(
+                                  width: 200,
+                                  height: 60,
+                                  child: OutlinedButton.icon(
+                                    style: OutlinedButton.styleFrom(
+                                      backgroundColor: Colors.white,
+                                      elevation: 20,
+                                      shadowColor: Colors.black,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 20, horizontal: 20),
+                                    ),
+                                    // ignore: prefer_const_constructors
+                                    icon: Image.asset(
+                                      'images/metamask.png',
+                                      height: 30,
+                                      width: 30,
+                                    ),
+                                    onPressed: () => connectToMeta(context),
+                                    label: const Text('Metamask'),
                                   ),
-                                  // ignore: prefer_const_constructors
-                                  icon: Image.asset(
-                                    'images/metamask.png',
-                                    height: 30,
-                                    width: 30,
-                                  ),
-                                  onPressed: () => connectToMeta(context),
-                                  label: const Text('Metamask'),
                                 ),
                                 const SizedBox(height: 20),
-                                OutlinedButton.icon(
-                                  style: OutlinedButton.styleFrom(
-                                    backgroundColor: Colors.white,
-                                    elevation: 20,
-                                    shadowColor: Colors.black,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 20, horizontal: 34),
-                                  ),
-                                  onPressed: () => connectToWallet(context),
-                                  icon: Image.asset(
-                                    'images/wallet.png',
-                                    height: 30,
-                                    width: 30,
-                                  ),
-                                  label: const Text(
-                                    'WalletConnect',
+                                SizedBox(
+                                  width: 200,
+                                  height: 60,
+                                  child: OutlinedButton.icon(
+                                    style: OutlinedButton.styleFrom(
+                                      backgroundColor: Colors.white,
+                                      elevation: 20,
+                                      shadowColor: Colors.black,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 20, horizontal: 20),
+                                    ),
+                                    onPressed: () => connectToWallet(context),
+                                    icon: Image.asset(
+                                      'images/wallet.png',
+                                      height: 30,
+                                      width: 30,
+                                    ),
+                                    label: const Text(
+                                      'WalletConnect',
+                                    ),
                                   ),
                                 ),
                               ],

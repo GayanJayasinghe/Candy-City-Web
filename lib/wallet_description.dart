@@ -36,13 +36,6 @@ class MyWalletDes extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Wallet Details',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 36,
-                      fontFamily: 'LilyScriptOne',
-                      color: Colors.white,
-                    )),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -58,85 +51,92 @@ class MyWalletDes extends StatelessWidget {
                           height: 320,
                           child: Center(
                               child: Column(
-                                children: <Widget>[
-                                  const SizedBox(height: 20),
-                                  Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Text('User ID : $userID'),
-                                        ]),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 25.0),
-                                    child: SizedBox(
-                                        width: 450,
-                                        child: TextFormField(
-                                            controller: null,
-                                            keyboardType: TextInputType.number,
-                                            inputFormatters: <TextInputFormatter>[
-                                              // for below version 2 use this
-                                              FilteringTextInputFormatter.allow(
-                                                  RegExp(r'[0-9]')),
-                                              FilteringTextInputFormatter.digitsOnly
-                                            ],
-                                            decoration: const InputDecoration(
-                                              labelText: "  Enter amount to deposit or withdraw",
-                                              //hintText: "whatever you want",
-                                              //icon: Icon(Icons.money)
-                                            ))),
-                                  ),
-                                  const SizedBox(height: 30),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 25.0),
-                                    child: Text('In Candy City you have : $tokens CANDY'),
-                                  ),
-                                  const SizedBox(height: 100),
-                                  Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        ButtonTheme(
-                                          minWidth: 100,
-                                          child: OutlinedButton(
-                                            style: OutlinedButton.styleFrom(
-                                              backgroundColor: Colors.white,
-                                              elevation: 20,
-                                              shadowColor: Colors.black,
-                                              padding: const EdgeInsets.symmetric(
-                                                vertical: 20, horizontal: 20
-                                              )
-                                            ),
-                                            onPressed: () => deposit(context),
-                                            child: const Text(
-                                              'Deposit',
-                                            ),
-                                          ),
+                            children: <Widget>[
+                              const SizedBox(height: 15),
+                              const Text('Wallet Details',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 36,
+                                    fontFamily: 'LilyScriptOne',
+                                    color: Colors.white,
+                                    decoration: TextDecoration.underline,
+                                  )),
+                              const SizedBox(height: 10),
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text('User ID : $userID'),
+                                    ]),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 25.0),
+                                child: SizedBox(
+                                    width: 450,
+                                    child: TextFormField(
+                                        controller: null,
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: <TextInputFormatter>[
+                                          // for below version 2 use this
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'[0-9]')),
+                                          FilteringTextInputFormatter.digitsOnly
+                                        ],
+                                        decoration: const InputDecoration(
+                                          labelText:
+                                              "  Enter amount to deposit or withdraw",
+                                          //hintText: "whatever you want",
+                                          //icon: Icon(Icons.money)
+                                        ))),
+                              ),
+                              const SizedBox(height: 30),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 25.0),
+                                child: Text(
+                                    'In Candy City you have : $tokens CANDY'),
+                              ),
+                              const SizedBox(height: 55),
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ButtonTheme(
+                                      minWidth: 100,
+                                      child: OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Colors.white,
+                                            elevation: 20,
+                                            shadowColor: Colors.black,
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 20, horizontal: 20)),
+                                        onPressed: () => deposit(context),
+                                        child: const Text(
+                                          'Deposit',
                                         ),
-                                        const SizedBox(width: 20),
-                                        ButtonTheme(
-                                          minWidth: 100,
-                                          height: 200,
-                                          child: OutlinedButton(
-                                            style: OutlinedButton.styleFrom(
-                                              backgroundColor: Colors.white,
-                                              elevation: 20,
-                                              shadowColor: Colors.black,
-                                                padding: const EdgeInsets.symmetric(
-                                                    vertical: 20, horizontal: 20
-                                                )
-                                            ),
-                                            onPressed: () =>
-                                                withdraw(context),
-                                            child: const Text(
-                                              'Withdraw',
-                                            ),
-                                          ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 20),
+                                    ButtonTheme(
+                                      minWidth: 100,
+                                      height: 200,
+                                      child: OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Colors.white,
+                                            elevation: 20,
+                                            shadowColor: Colors.black,
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 20, horizontal: 20)),
+                                        onPressed: () => withdraw(context),
+                                        child: const Text(
+                                          'Withdraw',
                                         ),
-                                      ]),
-                                ],
-                              )),
+                                      ),
+                                    ),
+                                  ]),
+                            ],
+                          )),
                         ),
                       ),
                     ),
@@ -150,8 +150,6 @@ class MyWalletDes extends StatelessWidget {
     );
   }
 }
-
-
 
 deposit(BuildContext context) {
   Navigator.of(context)
