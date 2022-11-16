@@ -112,6 +112,11 @@ class _MyWalletDesState extends State<MyWalletDes> {
                                     ButtonTheme(
                                       minWidth: 100,
                                       child: OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          backgroundColor: Colors.white,
+                                          elevation: 20,
+                                          shadowColor: Colors.black,
+                                        ),
                                         onPressed: () => connectToMeta(context),
                                         child: const Text(
                                           'Deposit',
@@ -123,6 +128,11 @@ class _MyWalletDesState extends State<MyWalletDes> {
                                       minWidth: 100,
                                       height: 200,
                                       child: OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          backgroundColor: Colors.white,
+                                          elevation: 20,
+                                          shadowColor: Colors.black,
+                                        ),
                                         onPressed: () =>
                                             connectToWallet(context),
                                         child: const Text(

@@ -71,6 +71,12 @@ class _MyWalletState extends State<MyWallet> {
                               ButtonTheme(
                                 minWidth: 100,
                                 child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    elevation: 20,
+                                    shadowColor: Colors.black,
+                                    fixedSize: const Size.fromWidth(320),
+                                  ),
                                   onPressed: () => connectToMeta(context),
                                   child: const Text('Connect To Metamask'),
                                 ),
@@ -80,6 +86,12 @@ class _MyWalletState extends State<MyWallet> {
                                 minWidth: 100,
                                 height: 200,
                                 child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    elevation: 20,
+                                    shadowColor: Colors.black,
+                                    fixedSize: const Size.fromWidth(320),
+                                  ),
                                   onPressed: () => connectToWallet(context),
                                   child: const Text(
                                     'Connect To Wallet',

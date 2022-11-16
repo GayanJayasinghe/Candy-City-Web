@@ -45,6 +45,7 @@ dependencies:
   provider: ^4.3.3
   firebase_core: ^2.2.0
   flutter_web3: ^2.1.9
+  font_awesome_flutter: ^9.0.0
 
 dev_dependencies:
   flutter_test:
