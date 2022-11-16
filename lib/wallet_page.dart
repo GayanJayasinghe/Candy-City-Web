@@ -128,7 +128,7 @@ class _MyWalletState extends State<MyWallet> {
                                       elevation: 20,
                                       shadowColor: Colors.black,
                                       padding: const EdgeInsets.symmetric(
-                                          vertical: 20, horizontal: 20),
+                                          vertical: 20, horizontal: 34),
                                     ),
                                     onPressed: () => connectToWallet(context),
                                     icon: Image.asset(
