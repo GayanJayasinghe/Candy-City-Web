@@ -72,8 +72,8 @@ class Web3Connection {
   static const _tokenContractAddress =
       '0x06C04B0AD236e7Ca3B3189b1d049FE80109C7977';
   static const _gameContractAddress =
-      '0x1b845c64c07361d13a08f479c60F72DBb4616d73';
-  static const _privateKey = '0x8C6b28B59ad9624f7BF458984c865702a2a683D8';
+      '0x61dd8354917c92f986BA81f2222Ac033A4Bb1521';
+  static const _privateKey = '2e44e14c394a5868fb8902462cfdd0b755ba11118fb15ab6de9f70e8f7174e73';
 
   List<String>? _accounts;
   String _gameABIJson = '';
@@ -159,8 +159,20 @@ class Web3Connection {
   }
 
   Future<dynamic> approveFundDeposit(int value) async {
+
+    var val = BigInt.from(1000000000000000);
+
+   final gas = await _web3provider!.getSigner().estimateGas(TransactionRequest(
+      to:_gameContractAddress, from: _accounts![0],value : val
+    ));
+
+   print('Gas price ' + gas.toString());
+
+   var gasPrice = gas * BigInt.from(13) / BigInt.from(10);
     final results =
-        await getTokenContract().send('approve', [_gameContractAddress, 1]);
+        await getTokenContract().send('approve', [_gameContractAddress, val, {
+        'gasLimit': gasPrice}]);
+
     final receipt = await results.wait();
     print(receipt);
     return receipt;
@@ -168,7 +180,14 @@ class Web3Connection {
 
   Future<dynamic> depositFund(int amount) async {
     await approveFundDeposit(amount);
-    final results = await getGameContract().send('deposit', [amount]);
+    final gas = await _web3provider!.getSigner().estimateGas(TransactionRequest(
+        to:_gameContractAddress, from: _accounts![0],value : BigInt.from(amount)
+    ));
+
+    var gasPrice = gas * BigInt.from(13) / BigInt.from(10);
+
+    final results = await getGameContract().send('deposit', [amount, {
+      'gasLimit': gasPrice}]);
 
     final receipt = await results.wait(); // Wait until transaction complete
     print(receipt);
@@ -177,16 +196,23 @@ class Web3Connection {
   Future<dynamic> withdrawFund(int amount) async {
     var time = DateTime.now().millisecondsSinceEpoch;
 
-    final anotherWallet = Wallet('603a1585620b53eacf3cb91ce313e9496f94b4637248a64a40abb34e233c0050',_web3provider);
+    final anotherWallet = Wallet(_privateKey);
 
     print(anotherWallet.address);
     var dig = EthUtils.solidityKeccak256(['address', 'uint256', 'uint256'], [_accounts![0], time, amount]);
     //var signature = await getSigner().signMessage(msg);
     var signature2 = await anotherWallet.signMessage(EthUtils.arrayify(dig));
 
-    //final tx = await getGameContract().send('withdraw',[amount, time, signature2]);
-    //trx.hash;
-    //final receipt = tx.wait(); // Wait until transaction complete
-    //print(receipt);
+    final gas = await _web3provider!.getSigner().estimateGas(TransactionRequest(
+        to:_gameContractAddress, from: _accounts![0],value : BigInt.from(amount)
+    ));
+
+    var gasPrice = gas * BigInt.from(13) / BigInt.from(10);
+
+    final tx = await getGameContract().send('withdraw',[amount, time, signature2, {
+      'gasLimit': gasPrice}]);
+
+    final receipt = tx.wait(); // Wait until transaction complete
+    print(receipt);
   }
 }
