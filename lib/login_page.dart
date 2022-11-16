@@ -107,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: TextField(
                     controller: _emailController,
                     decoration: InputDecoration(
-                      prefixIcon: const Icon(FontAwesomeIcons.cartPlus),
+                      prefixIcon: const Icon(Icons.email),
                       hintText: 'Email',
                       fillColor: Colors.blue[200],
                       filled: true,
@@ -146,6 +146,27 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 10),
+
+              //sign in button
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              //   child: GestureDetector(
+              //     onTap: signIn,
+              //     child: Container(
+              //       width: 400.0,
+              //       padding: const EdgeInsets.all(20),
+              //       decoration: BoxDecoration(
+              //           color: Colors.deepPurple,
+              //           borderRadius: BorderRadius.circular(12)),
+              //       child: const Center(
+              //         child: Text(
+              //           'Sign In',
+              //           style: TextStyle(color: Colors.white),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
 
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
