@@ -75,19 +75,23 @@ class Web3Connection {
       '0x61dd8354917c92f986BA81f2222Ac033A4Bb1521';
   static const _privateKey = '2e44e14c394a5868fb8902462cfdd0b755ba11118fb15ab6de9f70e8f7174e73';
 
-  List<String>? _accounts;
-  String _gameABIJson = '';
-  String _tokenABIJson = '';
-  Web3Provider? _web3provider;
-  Contract? _gameContract;
-  Contract? _tokenContract;
+  static List<String>? _accounts;
+  static String _gameABIJson = '';
+  static String _tokenABIJson = '';
+  static Web3Provider? _web3provider;
+  static Contract? _gameContract;
+  static Contract? _tokenContract;
 
-  Web3Connection(){
-    connectToMetaMaskWallet();
+  static _resetWallets(){
+    _accounts = null;
+    _web3provider = null;
+    _gameContract = null;
+    _tokenContract = null;
   }
 
-  Future<dynamic> connectToWalletConnect() async {
+  static Future<dynamic> connectToWalletConnect(Function(String, bool) action) async {
     try {
+      _resetWallets();
       WalletConnectProvider walletConnectProvider =  WalletConnectProvider.fromInfura("9aa3d95b3bc440fa88ea12eaa4456161");
       await walletConnectProvider.connect();
       var walletconnectJson = window.localStorage['walletconnect'];
@@ -95,14 +99,17 @@ class Web3Connection {
       String accountsList = walletconnectObj['accounts'][0];
       print('Account address : $accountsList');
       _web3provider = Web3Provider.fromWalletConnect(walletConnectProvider);
+      action('Connected', true);
     } catch (e) {
       print('User rejected the modal ' + e.toString());
+      action(e.toString(), false);
     }
   }
 
-  Future<dynamic> connectToMetaMaskWallet() async {
+  static Future<dynamic> connectToMetaMaskWallet(Function(String, bool) action) async {
     if (ethereum != null) {
       try {
+        _resetWallets();
         print('Connecting MetaMask wallet...');
         _web3provider = Web3Provider(ethereum!);
         _accounts = await ethereum!.requestAccount();
@@ -110,55 +117,54 @@ class Web3Connection {
         for (var element in _accounts!) {
           print('Account address : $element');
         }
+        action('Connected', true);
       } on EthereumUserRejected {
         print('User rejected the modal');
+        action('User rejected the modal', false);
       }
     } else {
       print('Your browser does not support!');
+      action('Your browser does not support!', false);
     }
   }
 
-  getSigner() {
+  static _getSigner() {
     return _web3provider!.getSigner();
   }
 
-  getTokenWalletSigner() {
-    return _web3provider!.getSigner();
-  }
-
-  getGameABI() {
+  static _getGameABI() {
     if (_gameABIJson.isEmpty) {
       _gameABIJson = jsonEncode(_abi);
     }
     return _gameABIJson;
   }
 
-  getTokenABI() {
+  static _getTokenABI() {
     if (_tokenABIJson.isEmpty) {
       _tokenABIJson = jsonEncode(_erc20Abi);
     }
     return _tokenABIJson;
   }
 
-  getGameContract() {
+  static _getGameContract() {
     _gameContract ??= Contract(
       _gameContractAddress,
-      Interface(getGameABI()),
-      getSigner(),
+      Interface(_getGameABI()),
+      _getSigner(),
     );
     return _gameContract;
   }
 
-  getTokenContract() {
+  static _getTokenContract() {
     _tokenContract ??= Contract(
       _tokenContractAddress,
-      Interface(getTokenABI()),
-      getSigner(),
+      Interface(_getTokenABI()),
+      _getSigner(),
     );
     return _tokenContract;
   }
 
-  Future<dynamic> approveFundDeposit(int value) async {
+  static Future<dynamic> _approveFundDeposit(int value) async {
 
     var val = BigInt.from(1000000000000000);
 
@@ -170,7 +176,7 @@ class Web3Connection {
 
    var gasPrice = gas * BigInt.from(13) / BigInt.from(10);
     final results =
-        await getTokenContract().send('approve', [_gameContractAddress, val, {
+        await _getTokenContract().send('approve', [_gameContractAddress, val, {
         'gasLimit': gasPrice}]);
 
     final receipt = await results.wait();
@@ -178,22 +184,22 @@ class Web3Connection {
     return receipt;
   }
 
-  Future<dynamic> depositFund(int amount) async {
-    await approveFundDeposit(amount);
+  static Future<dynamic> depositFund(int amount) async {
+    await _approveFundDeposit(amount);
     final gas = await _web3provider!.getSigner().estimateGas(TransactionRequest(
         to:_gameContractAddress, from: _accounts![0],value : BigInt.from(amount)
     ));
 
     var gasPrice = gas * BigInt.from(13) / BigInt.from(10);
 
-    final results = await getGameContract().send('deposit', [amount, {
+    final results = await _getGameContract().send('deposit', [amount, {
       'gasLimit': gasPrice}]);
 
     final receipt = await results.wait(); // Wait until transaction complete
     print(receipt);
   }
 
-  Future<dynamic> withdrawFund(int amount) async {
+  static Future<dynamic> withdrawFund(int amount) async {
     var time = DateTime.now().millisecondsSinceEpoch;
 
     final anotherWallet = Wallet(_privateKey);
@@ -209,7 +215,7 @@ class Web3Connection {
 
     var gasPrice = gas * BigInt.from(13) / BigInt.from(10);
 
-    final tx = await getGameContract().send('withdraw',[amount, time, signature2, {
+    final tx = await _getGameContract().send('withdraw',[amount, time, signature2, {
       'gasLimit': gasPrice}]);
 
     final receipt = tx.wait(); // Wait until transaction complete
