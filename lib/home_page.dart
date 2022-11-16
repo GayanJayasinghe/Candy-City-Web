@@ -46,31 +46,31 @@ class _HomePageState extends State<HomePage> {
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              //child: BackdropFilter(
-              //filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-              child: Center(
-                child: Card(
-                  elevation: 10,
-                  color: Colors.white.withOpacity(0.5),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30)),
-                  child: SizedBox(
-                    width: 460,
-                    height: 320,
-                    child: Center(
-                      child: SizedBox(
-                        width: 60,
-                        height: 60,
-                        child: FloatingActionButton.small(
-                            backgroundColor: Colors.white12,
-                            onPressed: () => _dialogBuilder(context),
-                            child: Icon(Icons.add)),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                child: Center(
+                  child: Card(
+                    elevation: 10,
+                    color: Colors.white.withOpacity(0.5),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                    child: SizedBox(
+                      width: 460,
+                      height: 320,
+                      child: Center(
+                        child: SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: FloatingActionButton.small(
+                              backgroundColor: Colors.white12,
+                              onPressed: () => _dialogBuilder(context),
+                              child: Icon(Icons.add)),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-              //)
             ),
           ]),
         ),

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:my_app/wallet_description.dart';
 
@@ -44,62 +46,72 @@ class _MyWalletState extends State<MyWallet> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Connect Wallet',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 36,
-                      fontFamily: 'LilyScriptOne',
-                      color: Colors.white,
-                    )),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Card(
-                        elevation: 10,
-                        color: Colors.white.withOpacity(0.5),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                        child: SizedBox(
-                          width: 460,
-                          height: 320,
-                          child: Center(
-                              child: Column(
-                            children: <Widget>[
-                              const SizedBox(height: 100),
-                              ButtonTheme(
-                                minWidth: 100,
-                                child: OutlinedButton(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                        child: Card(
+                          elevation: 10,
+                          color: Colors.white.withOpacity(0.5),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)),
+                          child: SizedBox(
+                            width: 460,
+                            height: 320,
+                            child: Center(
+                                child: Column(
+                              children: <Widget>[
+                                const SizedBox(height: 15),
+                                const Text('Connect Wallet',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 36,
+                                      fontFamily: 'LilyScriptOne',
+                                      color: Colors.white,
+                                    )),
+                                const SizedBox(height: 40),
+                                OutlinedButton.icon(
                                   style: OutlinedButton.styleFrom(
                                     backgroundColor: Colors.white,
                                     elevation: 20,
                                     shadowColor: Colors.black,
-                                    fixedSize: const Size.fromWidth(320),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20, horizontal: 20),
+                                  ),
+                                  // ignore: prefer_const_constructors
+                                  icon: Image.asset(
+                                    'images/metamask.png',
+                                    height: 30,
+                                    width: 30,
                                   ),
                                   onPressed: () => connectToMeta(context),
-                                  child: const Text('Connect To Metamask'),
+                                  label: const Text('Connect To Metamask'),
                                 ),
-                              ),
-                              const SizedBox(height: 20),
-                              ButtonTheme(
-                                minWidth: 100,
-                                height: 200,
-                                child: OutlinedButton(
+                                const SizedBox(height: 20),
+                                OutlinedButton.icon(
                                   style: OutlinedButton.styleFrom(
                                     backgroundColor: Colors.white,
                                     elevation: 20,
                                     shadowColor: Colors.black,
-                                    fixedSize: const Size.fromWidth(320),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20, horizontal: 34),
                                   ),
                                   onPressed: () => connectToWallet(context),
-                                  child: const Text(
+                                  icon: Image.asset(
+                                    'images/wallet.png',
+                                    height: 30,
+                                    width: 30,
+                                  ),
+                                  label: const Text(
                                     'Connect To Wallet',
                                   ),
                                 ),
-                              ),
-                            ],
-                          )),
+                              ],
+                            )),
+                          ),
                         ),
                       ),
                     ),
