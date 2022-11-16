@@ -1,6 +1,9 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/RealtimeDatabase.dart';
+import 'package:my_app/Web3Connection.dart';
 import 'package:my_app/wallet_description.dart';
 
 class MyWallet extends StatefulWidget {
@@ -10,14 +13,28 @@ class MyWallet extends StatefulWidget {
   State<MyWallet> createState() => _MyWalletState();
 }
 
-connectToMeta(BuildContext context) {
-  Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => MyWalletDes()));
+connectToMeta(BuildContext context) async{
+  var tokensAmount = await RealtimeDatabase.read('items/token');
+  Web3Connection.connectToMetaMaskWallet((p0, p1) => {
+    if(p1){
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => MyWalletDes(tokens: tokensAmount, userID: FirebaseAuth.instance.currentUser!.uid)))
+    } else{
+      print(p0)
+    }
+  });
 }
 
-connectToWallet(BuildContext context) {
-  Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => MyWalletDes()));
+connectToWallet(BuildContext context) async{
+  var tokensAmount = await RealtimeDatabase.read('items/token');
+  Web3Connection.connectToWalletConnect((p0, p1) => {
+    if(p1){
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => MyWalletDes(tokens: tokensAmount, userID: FirebaseAuth.instance.currentUser!.uid)))
+    } else{
+      print(p0)
+    }
+  });
 }
 
 class _MyWalletState extends State<MyWallet> {
@@ -88,7 +105,7 @@ class _MyWalletState extends State<MyWallet> {
                                     width: 30,
                                   ),
                                   onPressed: () => connectToMeta(context),
-                                  label: const Text('Connect To Metamask'),
+                                  label: const Text('Metamask'),
                                 ),
                                 const SizedBox(height: 20),
                                 OutlinedButton.icon(
@@ -106,7 +123,7 @@ class _MyWalletState extends State<MyWallet> {
                                     width: 30,
                                   ),
                                   label: const Text(
-                                    'Connect To Wallet',
+                                    'WalletConnect',
                                   ),
                                 ),
                               ],
