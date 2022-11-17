@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +21,32 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
 
   Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _passwordController.text.trim(),
-    );
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+    } catch (e) {
+      AwesomeDialog(
+              context: context,
+              headerAnimationLoop: false,
+              dialogType: DialogType.noHeader,
+              title: 'Error',
+              width: 500,
+              titleTextStyle: const TextStyle(
+                fontSize: 32,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'LilyScriptOne',
+              ),
+              desc: e.toString(),
+              btnOkOnPress: () {
+                debugPrint('OnClcik');
+              },
+              btnOkColor: Colors.pink,
+              btnOkText: 'Close')
+          .show();
+    }
   }
 
   @override
@@ -35,28 +58,72 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<UserCredential> signInWithApple() async {
     // Create and configure an OAuthProvider for Sign In with Apple.
-    final provider = OAuthProvider('apple.com')
-      ..addScope('email')
-      ..addScope('name');
+    try {
+      final provider = OAuthProvider('apple.com')
+        ..addScope('email')
+        ..addScope('name');
 
-    // Sign in the user with Firebase.
-    return await FirebaseAuth.instance.signInWithPopup(provider);
+      // Sign in the user with Firebase.
+      return await FirebaseAuth.instance.signInWithPopup(provider);
+    } catch (e) {
+      AwesomeDialog(
+              context: context,
+              headerAnimationLoop: false,
+              dialogType: DialogType.noHeader,
+              title: 'Error',
+              width: 500,
+              titleTextStyle: const TextStyle(
+                fontSize: 32,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'LilyScriptOne',
+              ),
+              desc: e.toString(),
+              btnOkOnPress: () {
+                debugPrint('OnClcik');
+              },
+              btnOkColor: Colors.pink,
+              btnOkText: 'Close')
+          .show();
+
+      throw Exception(e);
+    }
   }
 
   Future<UserCredential> signInWithFacebook() async {
-    // Create a new provider
-    FacebookAuthProvider facebookProvider = FacebookAuthProvider();
+    try {
+      FacebookAuthProvider facebookProvider = FacebookAuthProvider();
 
-    facebookProvider.addScope('email');
-    facebookProvider.setCustomParameters({
-      'display': 'popup',
-    });
+      facebookProvider.addScope('email');
+      facebookProvider.setCustomParameters({
+        'display': 'popup',
+      });
 
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithPopup(facebookProvider);
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.signInWithPopup(facebookProvider);
+    } catch (e) {
+      AwesomeDialog(
+              context: context,
+              headerAnimationLoop: false,
+              dialogType: DialogType.noHeader,
+              title: 'Error',
+              width: 500,
+              titleTextStyle: const TextStyle(
+                fontSize: 32,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'LilyScriptOne',
+              ),
+              desc: e.toString(),
+              btnOkOnPress: () {
+                debugPrint('OnClcik');
+              },
+              btnOkColor: Colors.pink,
+              btnOkText: 'Close')
+          .show();
 
-    // Or use signInWithRedirect
-    // return await FirebaseAuth.instance.signInWithRedirect(facebookProvider);
+      throw Exception(e);
+    }
   }
 
   @override

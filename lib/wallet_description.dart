@@ -1,35 +1,121 @@
 import 'dart:ui';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_web3/ethers.dart';
 import 'package:my_app/RealtimeDatabase.dart';
 import 'package:my_app/Web3Connection.dart';
 import 'package:my_app/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-class MyWalletDes extends StatelessWidget {
-  MyWalletDes({super.key, required this.tokens, required this.userID});
+class MyWalletDes extends StatefulWidget {
+  MyWalletDes({super.key, required this.tokens});
 
   var tokens;
-  final String userID;
-  final amountController = TextEditingController();
 
+
+  @override
+  State<MyWalletDes> createState() => _MyCustomFormState(tokens: tokens);
+
+}
+
+class _MyCustomFormState extends State<MyWalletDes> {
+
+  _MyCustomFormState({ required this.tokens}) {}
+
+  String userID = FirebaseAuth.instance.currentUser!.uid;
+  int tokens;
+
+  updateTokens(){
+    setState(() {
+
+    });
+  }
+
+
+  final amountController = TextEditingController();
   deposit(BuildContext context) async {
     if (amountController.text.isNotEmpty) {
       var amount = BigInt.parse(amountController.text);
-      print(amount);
-      await Web3Connection.depositFund(amount);
+      await Web3Connection.depositFund(amount, context);
       tokens = await RealtimeDatabase.read('items/token');
-      print(tokens);
+      updateTokens();
+    } else{
+      AwesomeDialog(
+          context: context,
+          headerAnimationLoop: false,
+          dialogType: DialogType.noHeader,
+          title: 'Error',
+          width: 500,
+          titleTextStyle: const TextStyle(
+            fontSize: 32,
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.w600,
+            fontFamily: 'LilyScriptOne',
+          ),
+          desc: 'Amount can not be empty',
+          btnOkOnPress: () {
+            debugPrint('OnClcik');
+          },
+          btnOkColor: Colors.pink,
+          btnOkText: 'Close'
+      ).show();
     }
   }
 
-  withdraw(BuildContext context) {
+  withdraw(BuildContext context) async{
     if (amountController.text.isNotEmpty) {
       var amount = int.parse(amountController.text);
-      print(amount);
-      Web3Connection.withdrawFund(amountController.text);
+      updateTokens();
+      if(tokens >= amount)
+      {
+        await Web3Connection.withdrawFund(amountController.text, context);
+        tokens = await RealtimeDatabase.read('items/token');
+        updateTokens();
+      } else{
+        AwesomeDialog(
+            context: context,
+            headerAnimationLoop: false,
+            dialogType: DialogType.noHeader,
+            title: 'Error',
+            width: 500,
+            titleTextStyle: const TextStyle(
+              fontSize: 32,
+              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'LilyScriptOne',
+            ),
+            desc: 'You don\'t have enough funds in Candy City game to do this transaction',
+            btnOkOnPress: () {
+              debugPrint('OnClcik');
+            },
+            btnOkColor: Colors.pink,
+            btnOkText: 'Close'
+        ).show();
+      }
+    } else{
+      AwesomeDialog(
+          context: context,
+          headerAnimationLoop: false,
+          dialogType: DialogType.noHeader,
+          title: 'Error',
+          width: 500,
+          titleTextStyle: const TextStyle(
+            fontSize: 32,
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.w600,
+            fontFamily: 'LilyScriptOne',
+          ),
+          desc: 'Amount can not be empty',
+          btnOkOnPress: () {
+            debugPrint('OnClcik');
+          },
+          btnOkColor: Colors.pink,
+          btnOkText: 'Close'
+      ).show();
     }
   }
 

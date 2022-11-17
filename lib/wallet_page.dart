@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/RealtimeDatabase.dart';
@@ -16,15 +17,32 @@ class MyWallet extends StatefulWidget {
 connectToMeta(BuildContext context) async {
   var tokensAmount = await RealtimeDatabase.read('items/token');
   Web3Connection.connectToMetaMaskWallet((p0, p1) => {
-        if (true)
+        if (p1)
           {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => MyWalletDes(
-                    tokens: tokensAmount,
-                    userID: FirebaseAuth.instance.currentUser!.uid)))
+                    tokens: tokensAmount)))
           }
         else
-          {print(p0)}
+          AwesomeDialog(
+              context: context,
+              headerAnimationLoop: false,
+              dialogType: DialogType.noHeader,
+              title: 'Connection error',
+              width: 500,
+              titleTextStyle: const TextStyle(
+                fontSize: 32,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'LilyScriptOne',
+              ),
+              desc: p0,
+              btnOkOnPress: () {
+                debugPrint('OnClcik');
+              },
+              btnOkColor: Colors.pink,
+              btnOkText: 'Close'
+          ).show()
       });
 }
 
@@ -35,11 +53,31 @@ connectToWallet(BuildContext context) async {
           {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => MyWalletDes(
-                    tokens: tokensAmount,
-                    userID: FirebaseAuth.instance.currentUser!.uid)))
+                    tokens: tokensAmount))),
+            print('dd')
           }
         else
-          {print(p0)}
+          {
+            AwesomeDialog(
+              context: context,
+              headerAnimationLoop: false,
+              dialogType: DialogType.noHeader,
+              title: 'Connection error',
+              width: 500,
+              titleTextStyle: const TextStyle(
+                fontSize: 32,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'LilyScriptOne',
+              ),
+              desc: p0,
+              btnOkOnPress: () {
+                debugPrint('OnClcik');
+              },
+              btnOkColor: Colors.pink,
+              btnOkText: 'Close'
+            ).show()
+          }
       });
 }
 
