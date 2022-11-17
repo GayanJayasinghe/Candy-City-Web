@@ -11,16 +11,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 class MyWalletDes extends StatelessWidget {
   MyWalletDes({super.key, required this.tokens, required this.userID});
 
-  final tokens;
+  var tokens;
   final String userID;
   final amountController = TextEditingController();
 
-  deposit(BuildContext context) {
+  deposit(BuildContext context) async{
     if(amountController.text.isNotEmpty)
     {
       var amount = BigInt.parse(amountController.text);
       print(amount);
-      Web3Connection.depositFund(amount);
+      await Web3Connection.depositFund(amount);
+      tokens = await RealtimeDatabase.read('items/token');
+      print(tokens);
     }
   }
 

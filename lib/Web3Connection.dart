@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:html';
 
 import 'package:flutter_web3/flutter_web3.dart';
+import 'package:my_app/RealtimeDatabase.dart';
 import 'package:my_app/WalletConnectionObj.dart';
 
 class Web3Connection {
@@ -196,6 +197,9 @@ class Web3Connection {
       'gasLimit': gasPrice}]);
 
     final receipt = await results.wait(); // Wait until transaction complete
+    var tokensAmount = await RealtimeDatabase.read('items/token') + amount.toInt();
+    print(tokensAmount);
+    RealtimeDatabase.write('items/token', tokensAmount);
     print(receipt);
   }
 

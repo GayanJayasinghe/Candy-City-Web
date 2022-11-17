@@ -5,15 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class RealtimeDatabase {
-  static void write({
-    required Map<String, dynamic> data,
-  }) async {
+  static void write(String path, dynamic data) async {
     try {
       String userId = FirebaseAuth.instance.currentUser!.uid;
-      DatabaseReference databaseReference =
-      FirebaseDatabase.instance.ref("users/$userId");
-
-      await databaseReference.set(data);
+      await FirebaseDatabase.instance.ref("users/$userId").child(path).set(data);
     } catch (e) {
       rethrow;
     }
