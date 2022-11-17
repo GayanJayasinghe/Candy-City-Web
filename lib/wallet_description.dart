@@ -15,9 +15,8 @@ class MyWalletDes extends StatelessWidget {
   final String userID;
   final amountController = TextEditingController();
 
-  deposit(BuildContext context) async{
-    if(amountController.text.isNotEmpty)
-    {
+  deposit(BuildContext context) async {
+    if (amountController.text.isNotEmpty) {
       var amount = BigInt.parse(amountController.text);
       print(amount);
       await Web3Connection.depositFund(amount);
@@ -27,14 +26,12 @@ class MyWalletDes extends StatelessWidget {
   }
 
   withdraw(BuildContext context) {
-    if(amountController.text.isNotEmpty)
-    {
+    if (amountController.text.isNotEmpty) {
       var amount = int.parse(amountController.text);
       print(amount);
       Web3Connection.withdrawFund(amountController.text);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -151,25 +148,7 @@ class MyWalletDes extends StatelessWidget {
                                                       ),
                                                     ),
                                                   ]))),
-                                      // ButtonTheme(
-                                      //   minWidth: 100,
-                                      //   child: OutlinedButton(
-                                      //     style: OutlinedButton.styleFrom(
-                                      //         backgroundColor: Colors.white,
-                                      //         elevation: 20,
-                                      //         shadowColor: Colors.black,
-                                      //         padding:
-                                      //             const EdgeInsets.symmetric(
-                                      //                 vertical: 20,
-                                      //                 horizontal: 20)),
-                                      //     onPressed: () => deposit(context),
-                                      //     child: const Text(
-                                      //       'Deposit',
-                                      //     ),
-                                      //   ),
-                                      // ),
                                       const SizedBox(width: 20),
-
                                       Padding(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 0.0),
@@ -193,25 +172,6 @@ class MyWalletDes extends StatelessWidget {
                                                       ),
                                                     ),
                                                   ]))),
-
-                                      // ButtonTheme(
-                                      //   minWidth: 100,
-                                      //   height: 200,
-                                      //   child: OutlinedButton(
-                                      //     style: OutlinedButton.styleFrom(
-                                      //         backgroundColor: Colors.white,
-                                      //         elevation: 20,
-                                      //         shadowColor: Colors.black,
-                                      //         padding:
-                                      //             const EdgeInsets.symmetric(
-                                      //                 vertical: 20,
-                                      //                 horizontal: 20)),
-                                      //     onPressed: () => withdraw(context),
-                                      //     child: const Text(
-                                      //       'Withdraw',
-                                      //     ),
-                                      //   ),
-                                      // ),
                                     ]),
                               ],
                             )),
@@ -229,4 +189,3 @@ class MyWalletDes extends StatelessWidget {
     );
   }
 }
-

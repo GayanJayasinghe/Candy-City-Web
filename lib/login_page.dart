@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -79,160 +81,143 @@ class _LoginPageState extends State<LoginPage> {
                 fit: BoxFit.cover,
               ),
             ),
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              const SizedBox(
-                height: 75,
-              ),
-              //Hello again!
-              const Text('Hello Again!',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 36,
-                    fontFamily: 'LilyScriptOne',
-                  )),
-              const SizedBox(height: 10),
-              const Text('Welcome back, you\'ve been missed!',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontFamily: 'LilyScriptOne',
-                  )),
-              const SizedBox(height: 50),
-
-              //email textfield
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: SizedBox(
-                  width: 450,
-                  child: TextField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.email),
-                      hintText: 'Email',
-                      fillColor: Colors.blue[200],
-                      filled: true,
-                      border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.black,
-                            width: 3,
-                          ),
-                          borderRadius: BorderRadius.circular(50)),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 75,
                     ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
+                    //Hello again!
+                    const Text('Hello Again!',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 36,
+                          fontFamily: 'LilyScriptOne',
+                        )),
+                    const SizedBox(height: 10),
+                    const Text('Welcome back, you\'ve been missed!',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'LilyScriptOne',
+                        )),
+                    const SizedBox(height: 50),
 
-              //password textfield
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: SizedBox(
-                  width: 450,
-                  child: TextField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.lock),
-                      hintText: 'Password',
-                      fillColor: Colors.blue[200],
-                      filled: true,
-                      border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.black,
-                            width: 3,
+                    //email textfield
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: SizedBox(
+                        width: 450,
+                        child: TextField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.email),
+                            hintText: 'Email',
+                            fillColor: Colors.blue[200],
+                            filled: true,
+                            border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.black,
+                                  width: 3,
+                                ),
+                                borderRadius: BorderRadius.circular(50)),
                           ),
-                          borderRadius: BorderRadius.circular(50)),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-
-              //sign in button
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              //   child: GestureDetector(
-              //     onTap: signIn,
-              //     child: Container(
-              //       width: 400.0,
-              //       padding: const EdgeInsets.all(20),
-              //       decoration: BoxDecoration(
-              //           color: Colors.deepPurple,
-              //           borderRadius: BorderRadius.circular(12)),
-              //       child: const Center(
-              //         child: Text(
-              //           'Sign In',
-              //           style: TextStyle(color: Colors.white),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: GestureDetector(
-                      onTap: signIn,
-                      child:
-                          Stack(alignment: Alignment.center, children: <Widget>[
-                        Image.asset(
-                          'images/Button.png',
-                          height: 240,
-                          width: 300,
                         ),
-                        const Text(
-                          'Sign In',
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+
+                    //password textfield
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: SizedBox(
+                        width: 450,
+                        child: TextField(
+                          controller: _passwordController,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.lock),
+                            hintText: 'Password',
+                            fillColor: Colors.blue[200],
+                            filled: true,
+                            border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.black,
+                                  width: 3,
+                                ),
+                                borderRadius: BorderRadius.circular(50)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                        child: GestureDetector(
+                            onTap: signIn,
+                            child: Stack(
+                                alignment: Alignment.center,
+                                children: <Widget>[
+                                  Image.asset(
+                                    'images/Button.png',
+                                    height: 240,
+                                    width: 300,
+                                  ),
+                                  const Text(
+                                    'Sign In',
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontFamily: 'LilyScriptOne',
+                                    ),
+                                  ),
+                                ]))),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Text(
+                          'Or sign in with',
                           style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            fontSize: 20,
+                            color: Colors.lightBlue,
                             fontFamily: 'LilyScriptOne',
                           ),
                         ),
-                      ]))),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text(
-                    'Or sign in with',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.lightBlue,
-                      fontFamily: 'LilyScriptOne',
+                      ],
                     ),
-                  ),
-                ],
-              ),
 
-              const SizedBox(
-                height: 25,
-              ),
+                    const SizedBox(
+                      height: 25,
+                    ),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SignInButton(
-                    Buttons.Facebook,
-                    mini: true,
-                    onPressed: signInWithFacebook,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  SignInButton(
-                    Buttons.Apple,
-                    mini: true,
-                    onPressed: signInWithApple,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                  )
-                ],
-              )
-            ]),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SignInButton(
+                          Buttons.Facebook,
+                          mini: true,
+                          onPressed: signInWithFacebook,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        SignInButton(
+                          Buttons.Apple,
+                          mini: true,
+                          onPressed: signInWithApple,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                        )
+                      ],
+                    )
+                  ]),
+            ),
           ),
         ),
       ),
